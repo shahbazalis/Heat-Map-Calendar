@@ -1,4 +1,4 @@
-# Heat Map Calender
+# Heat Map Calendar
 
 Heat map calendar to show the daily activity of an user using ReactJs
 
