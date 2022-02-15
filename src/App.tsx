@@ -1,10 +1,10 @@
-import './App.css';
+import "./App.css";
+import HeatMapCalendar from "./views/heatMapCalendar/heatMapCalendar";
 
 function App() {
- 
   return (
     <div className="App">
-      <h1>Heat Map Calendar</h1>
+      <HeatMapCalendar />
     </div>
   );
 }
