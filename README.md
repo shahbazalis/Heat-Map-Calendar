@@ -1,3 +1,7 @@
+# Heat Map Calender
+
+Heat map calendar to show the daily activity of an user using ReactJs
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
