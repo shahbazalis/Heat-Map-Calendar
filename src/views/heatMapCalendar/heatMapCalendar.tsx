@@ -5,7 +5,7 @@ import "react-calendar-heatmap/dist/styles.css";
 import ReactTooltip from "react-tooltip";
 import { getData } from "../../models/api";
 import { useEffect, useState } from "react";
-import moment from "moment";
+import moment from "moment"; 
 
 const HeatMapCalendar = () => {
   const [heatMapData, setHeatMapData] = useState([]); // useState is the hook which allows to have state variables in react funtional components
@@ -16,7 +16,7 @@ const HeatMapCalendar = () => {
     const response: any = await getData();
     const updatedDataArr: any = response.map((value: any) => {
       return {
-        date: moment(value.updated_at).format("YYYY-MM-DD"),
+        date: moment(value.updated_at).format("YYYY-MM-DD"), // formatting date into the required date format using moment
         contributions: value.watchers_count,
       };
     });
