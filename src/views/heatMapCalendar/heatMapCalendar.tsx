@@ -3,52 +3,30 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import "react-calendar-heatmap/dist/styles.css";
 import ReactTooltip from "react-tooltip";
+import { getData } from "../../models/api";
+import { useEffect, useState } from "react";
+import moment from "moment";
 
 const HeatMapCalendar = () => {
+  const [heatMapData, setHeatMapData] = useState([]); // useState is the hook which allows to have state variables in react funtional components
   const today = new Date();
 
-  const data = [
-    {
-      date: "2021-01-02",
-      contributions: 10,
-      details: {
-        visits: 16,
-        submissions: 5,
-        notebooks: 1,
-        discussions: 4,
-      },
-    },
-    {
-      date: "2021-01-03",
-      contributions: 15,
-      details: {
-        visits: 16,
-        submissions: 5,
-        notebooks: 1,
-        discussions: 4,
-      },
-    },
-    {
-      date: "2021-01-05",
-      contributions: 5,
-      details: {
-        visits: 16,
-        submissions: 5,
-        notebooks: 1,
-        discussions: 4,
-      },
-    },
-    {
-      date: "2021-02-05",
-      contributions: 3,
-      details: {
-        visits: 16,
-        submissions: 5,
-        notebooks: 1,
-        discussions: 4,
-      },
-    },
-  ];
+  //calling the function to get api response data
+  const apiResponseData = async () => {
+    const response: any = await getData();
+    const updatedDataArr: any = response.map((value: any) => {
+      return {
+        date: moment(value.updated_at).format("YYYY-MM-DD"),
+        contributions: value.watchers_count,
+      };
+    });
+    setHeatMapData(updatedDataArr); //setting state using setState function, when state changes component re-renders
+  };
+
+  // useEffect is the hook which is used to perform action based on sideeffects, it is called whenever component renders
+  useEffect(() => {
+    apiResponseData();
+  }, []);
 
   return (
     <div>
@@ -60,34 +38,27 @@ const HeatMapCalendar = () => {
             endDate={today}
             gutterSize={5}
             showWeekdayLabels={true}
-            values={data}
+            values={heatMapData}
             classForValue={(value) => {
               return !value
                 ? "color-empty"
-                : value.contributions >= 1 && value.contributions <= 3
+                : value.contributions === 0
                 ? `color-github-1`
-                : value.contributions >= 4 && value.contributions <= 6
+                : value.contributions === 1
                 ? `color-github-2`
-                : value.contributions >= 7 && value.contributions <= 9
+                : value.contributions === 2
                 ? `color-github-3`
                 : `color-github-4`;
             }}
             tooltipDataAttrs={(value: any) => {
               return !value.date
                 ? {
-                    "data-tip": `No contributions`,
+                    "data-tip": `No data available`,
                   }
                 : {
                     "data-tip": `${value.contributions} contributions on ${value.date}`,
                   };
             }}
-            // onClick={(value) => {
-            //   if (!value) {
-            //     alert(`No contribution`);
-            //   } else {
-            //     alert(`${value.contributions} contributions on ${value.date}`);
-            //   }
-            // }}
           />
           <ReactTooltip />
         </Grid>
