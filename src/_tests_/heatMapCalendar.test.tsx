@@ -1,6 +1,6 @@
 import { render, RenderResult } from "@testing-library/react";
 import Enzyme from "enzyme";
-import HeatMapCalendar from "./heatMapCalendar";
+import HeatMapCalendar from "../views/heatMapCalendar/heatMapCalendar";
 
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 
