@@ -9,10 +9,10 @@ import moment from "moment";
 import { UserActivityInfo } from "../../interfaces/UserActivityInfo";
 
 const HeatMapCalendar = () => {
-  const [heatMapData, setHeatMapData] = useState<UserActivityInfo[]>([]); // useState is the hook which allows to have state variables in react funtional components
+  const [heatMapData, setHeatMapData] = useState<UserActivityInfo[]>([]); // Initializing useState, it is the hook which allows to have state variables in react funtional components
   const today = new Date();
 
-  //calling the function to get api response data
+  //The function to get api response data
   const apiResponseData = async () => {
     const response = await getData();
     const updatedDataArr: UserActivityInfo[] = response.map(
