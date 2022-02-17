@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import "react-calendar-heatmap/dist/styles.css";
 import ReactTooltip from "react-tooltip";
-import { getUserActivityData } from "../../models/api";
+import { getUserActivityData } from "../../models/userActivityApi";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { UserActivityInfo } from "../../interfaces/UserActivityInfo";
