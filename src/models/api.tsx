@@ -1,5 +1,5 @@
 import axios from "axios"; // third party library to make api calls
-import { url } from "../utils/constant";
+import { url } from "../constants/constant";
 
 export const getData = async () => {
   try {
