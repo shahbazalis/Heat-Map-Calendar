@@ -10,6 +10,8 @@ import { UserActivityInfo } from "../../interfaces/UserActivityInfo";
 import { UpdatedUserActivityInfo } from "../../interfaces/UpdatedUserActivityInfo";
 import UserInfo from "./userInfo";
 import Dialog from "@mui/material/Dialog";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const HeatMapCalendar = () => {
   const [heatMapData, setHeatMapData] = useState<UserActivityInfo[]>([]); // Initializing useState
@@ -17,6 +19,8 @@ const HeatMapCalendar = () => {
     useState<UpdatedUserActivityInfo>();
   const currentDate = new Date();
   const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
 
   //The function to get api response data
   const apiResponseData = async () => {
@@ -33,11 +37,14 @@ const HeatMapCalendar = () => {
         }
       );
       setHeatMapData(updatedDataArr); //setting state using setState function
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      setErrorMessage(error.message);
+      setOpenAlert(true);
     }
   };
 
+  //function to set colors based on activity
   const githubActivityColors = (val: UpdatedUserActivityInfo) => {
     const colors: any = {
       "0": "color-github-1",
@@ -60,6 +67,10 @@ const HeatMapCalendar = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleAlertClose = () => {
+    setOpenAlert(false);
   };
 
   return (
@@ -95,6 +106,16 @@ const HeatMapCalendar = () => {
           userInfoObject={userInfoObject}
         />
       </Dialog>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={openAlert}
+        autoHideDuration={5000}
+        onClose={handleAlertClose}
+      >
+        <Alert onClose={handleAlertClose} severity="error">
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
