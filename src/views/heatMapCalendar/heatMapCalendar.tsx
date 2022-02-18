@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
+
 import CalendarHeatmap from "react-calendar-heatmap";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import "react-calendar-heatmap/dist/styles.css";
 import ReactTooltip from "react-tooltip";
-import { getUserActivityData } from "../../models/userActivityApi";
 import moment from "moment";
+
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Dialog from "@mui/material/Dialog";
+
+import UserInfo from "./userInfo";
+import ErrorAlert from "../../components/errorAlert";
+
 import { UserActivityInfo } from "../../interfaces/UserActivityInfo";
 import { UpdatedUserActivityInfo } from "../../interfaces/UpdatedUserActivityInfo";
-import UserInfo from "./userInfo";
-import Dialog from "@mui/material/Dialog";
 import { GitActivityColors } from "../../interfaces/GitActivityColors";
-import ErrorAlert from "../../components/errorAlert";
+
+import { getUserActivityData } from "../../models/userActivityApi";
 
 const HeatMapCalendar = () => {
   // Initializing state variables
@@ -36,6 +41,7 @@ const HeatMapCalendar = () => {
             name: value.owner.login,
             id: value.id,
             project: value.name,
+            img: value.owner.avatar_url,
           };
         }
       );
