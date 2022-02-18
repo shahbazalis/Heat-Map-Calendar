@@ -3,4 +3,5 @@ export interface UserActivityInfo {
   watchers_count: string;
   owner: { login: string };
   id: number;
+  name:string
 }

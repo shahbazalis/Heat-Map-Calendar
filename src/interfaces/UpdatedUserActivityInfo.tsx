@@ -3,4 +3,5 @@ export interface UpdatedUserActivityInfo {
     contributions: string;
     name:string,
     id:number
+    project:string
   }

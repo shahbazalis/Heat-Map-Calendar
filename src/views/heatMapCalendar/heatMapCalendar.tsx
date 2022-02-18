@@ -33,6 +33,7 @@ const HeatMapCalendar = () => {
             contributions: value.watchers_count,
             name: value.owner.login,
             id: value.id,
+            project:value.name
           };
         }
       );
