@@ -1,4 +1,4 @@
-import axios from "axios"; // third party library to make api calls
+import axios from "axios"; 
 import { url } from "../constants/constant";
 
 export const getUserActivityData = async () => {

@@ -1,26 +1,28 @@
+import { useEffect, useState } from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import "react-calendar-heatmap/dist/styles.css";
 import ReactTooltip from "react-tooltip";
 import { getUserActivityData } from "../../models/userActivityApi";
-import { useEffect, useState } from "react";
 import moment from "moment";
 import { UserActivityInfo } from "../../interfaces/UserActivityInfo";
 import { UpdatedUserActivityInfo } from "../../interfaces/UpdatedUserActivityInfo";
 import UserInfo from "./userInfo";
 import Dialog from "@mui/material/Dialog";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
+import { GitActivityColors } from "../../interfaces/GitActivityColors";
+import ErrorAlert from "../../components/errorAlert";
 
 const HeatMapCalendar = () => {
-  const [heatMapData, setHeatMapData] = useState<UserActivityInfo[]>([]); // Initializing useState
+  // Initializing state variables
+  const [heatMapData, setHeatMapData] = useState<UserActivityInfo[]>([]);
   const [userInfoObject, setUserInfoObject] =
     useState<UpdatedUserActivityInfo>();
-  const currentDate = new Date();
   const [open, setOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState<String>("");
   const [openAlert, setOpenAlert] = useState(false);
+
+  const currentDate = new Date();
 
   //The function to get api response data
   const apiResponseData = async () => {
@@ -33,21 +35,28 @@ const HeatMapCalendar = () => {
             contributions: value.watchers_count,
             name: value.owner.login,
             id: value.id,
-            project:value.name
+            project: value.name,
           };
         }
       );
-      setHeatMapData(updatedDataArr); //setting state using setState function
-    } catch (error: any) {
+
+      //setting state using setState function
+      setHeatMapData(updatedDataArr);
+    } catch (error: unknown) {
+      //Catch clause variable type annotation must be 'any' or 'unknown' if specified
       console.log(error);
-      setErrorMessage(error.message);
+      if (error instanceof Error) setErrorMessage(error.message);
       setOpenAlert(true);
     }
   };
 
+  useEffect(() => {
+    apiResponseData();
+  }, []);
+
   //function to set colors based on activity
-  const githubActivityColors = (val: UpdatedUserActivityInfo) => {
-    const colors: any = {
+  const githubActivityColors = (val: GitActivityColors) => {
+    const colors: GitActivityColors = {
       "0": "color-github-1",
       "1": "color-github-2",
       "2": "color-github-3",
@@ -57,15 +66,24 @@ const HeatMapCalendar = () => {
     return !val ? colors["default"] : colors[val.contributions] || colors["3"];
   };
 
-  useEffect(() => {
-    apiResponseData();
-  }, []);
+  //function to set tooltip for activity
+  const toolTipAttrs = (value: UpdatedUserActivityInfo) => {
+    return !value.date
+      ? {
+          "data-tip": `No data available`,
+        }
+      : {
+          "data-tip": `${value.contributions} contributions on ${value.date}`,
+        };
+  };
 
+  //function handles dialog open
   const handleOpen = (value: UpdatedUserActivityInfo) => {
     setUserInfoObject(value);
     if (value) setOpen(true);
   };
 
+  //function handles dialog close
   const handleClose = () => {
     setOpen(false);
   };
@@ -86,15 +104,9 @@ const HeatMapCalendar = () => {
             showWeekdayLabels={true}
             values={heatMapData}
             classForValue={(value) => githubActivityColors(value)}
-            tooltipDataAttrs={(value: UpdatedUserActivityInfo) => {
-              return !value.date
-                ? {
-                    "data-tip": `No data available`,
-                  }
-                : {
-                    "data-tip": `${value.contributions} contributions on ${value.date}`,
-                  };
-            }}
+            tooltipDataAttrs={(value: UpdatedUserActivityInfo) =>
+              toolTipAttrs(value)
+            }
             onClick={(value) => handleOpen(value)}
           />
           <ReactTooltip />
@@ -107,16 +119,11 @@ const HeatMapCalendar = () => {
           userInfoObject={userInfoObject}
         />
       </Dialog>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      <ErrorAlert
+        errorMessage={errorMessage}
         open={openAlert}
-        autoHideDuration={5000}
         onClose={handleAlertClose}
-      >
-        <Alert onClose={handleAlertClose} severity="error">
-          {errorMessage}
-        </Alert>
-      </Snackbar>
+      />
     </div>
   );
 };
