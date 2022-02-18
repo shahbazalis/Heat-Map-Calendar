@@ -2,10 +2,6 @@
 
 Heat map calendar to show the daily activity of an user using ReactJs. 
 
-# Heroku App
-
-To view the app in the browser. Open [https://heat-map-calendar.herokuapp.com/]
-
 ## Available Scripts
 
 In the project directory, you can run:
